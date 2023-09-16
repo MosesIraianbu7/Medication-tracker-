@@ -1,0 +1,264 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Medication Tracker</title>
+    <style>
+       
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: Arial;
+            background-color: #00FFFF;
+}
+      p {
+color:000000;}
+
+        .menu-icon {
+            cursor: pointer;
+            padding: 20px;
+        }
+
+        .bar {
+            width: 30px;
+            height: 3px;
+            background-color: #333;
+            margin: 6px 0;
+            transition: 0.4s;
+        }
+        .ad{
+        width:400px;
+        text-align:center;
+        color:red;}
+        
+        .menu {
+            background-color: #333;
+            width: 0;
+            height: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-x: hidden;
+            transition: 0.5s;
+            padding-top: 60px;
+        }
+
+        .menu ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .menu ul li {
+            padding: 20px;
+            text-align: center;
+        }
+
+   .menu a {
+            text-decoration: none;
+            color: #fff;
+            font-size: 18px;
+            display: block;
+        }
+
+     
+  .menu.active {
+            width: 250px;
+        }
+
+        .menu-icon.active .bar:nth-child(1) {
+            transform: rotate(-45deg) translate(-5px, 6px);
+        }
+
+   .menu-icon.active .bar:nth-child(2) {
+            opacity: 0;
+        }
+
+        .menu-icon.active .bar:nth-child(3) {
+            transform: rotate(45deg) translate(-5px, -6px);
+        }
+    </style>
+</head>
+<body>
+    <div class="menu-icon" onclick="toggleMenu()">
+        <div class="bar"></div>
+        <div class="bar"></div>
+        <div class="bar"></div>
+    </div>
+    <nav class="menu" id="menu">
+        <ul>
+        <li><a href="javascript:void(0);" onclick="showSection('home')">Home</a></li>
+        <li><a href="javascript:void(0);" onclick="showSection('about')">About</a></li>
+        <li><a href="javascript:void(0);" onclick="showSection('feedback')">Feedback</a></li>
+    </ul>
+</nav> 
+    <section id="home">
+    <center>
+    <div class="ad">
+<h1>MEDICATION TRACKER</h1></div>
+    <h1>Patient Details</h1>
+    <h2>
+        <form id="patientForm">
+
+            <label for="medicationname">Medication Name:</label>
+            <input type="text" id="medicationname" required><br><br>
+
+            <label for="dosage">Dosage:</label>
+            <input type="text" id="dosage" required><br><br>
+
+           
+            <label for="startDate">Start Date:</label>
+            <input type="date" id="startDate" required><br><br>
+            
+            <label for="endDate">End Date:</label>
+            <input type="date" id="endDate" required><br><br>
+            <label for="reminderTime">Reminder Time:</label>
+            <input type="time" id="reminderTime">
+            <button type="button" onclick="setReminder()">Set Reminder</button><br><br>
+            <button type="button" onclick="addmore()">Add More</button>
+        </form>
+    </h2>
+    <h2>Patients List</h2>
+</center>
+
+<center>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>Medication Name</th>
+                <th>Dosage</th>
+                <th>Start Date</th> 
+                <th>End Date</th> 
+                <th>Reminder Time</th> 
+            </tr>
+        </thead>
+        <tbody id="patientList">
+            <!-- Patient details will be added here dynamically -->
+        </tbody>
+    </table>
+</center>
+
+<script>
+    function addmore() {
+        const medicationname = document.getElementById('medicationname').value;
+        const dosage = document.getElementById('dosage').value;
+        const startDate  = document.getElementById('startDate').value;
+        const endDate = document.getElementById('endDate').value;
+        const reminderTime = document.getElementById('reminderTime').value;
+
+        if (medicationname && dosage && startDate && endDate && reminderTime ) {
+            const patientList = document.getElementById('patientList');
+            const newRow = patientList.insertRow(-1);
+            const cell1 = newRow.insertCell(0);
+            const cell2 = newRow.insertCell(1);
+            const cell3 = newRow.insertCell(2);
+            const cell4 = newRow.insertCell(3);
+            const cell5 = newRow.insertCell(4);
+           
+
+            cell1.innerHTML = medicationname;
+            cell2.innerHTML = dosage;
+            cell3.innerHTML = startDate; 
+            cell4.innerHTML = endDate; 
+            cell5.innerHTML = reminderTime;  
+
+            // Clear the input fields
+            document.getElementById('medicationname').value = '';
+            document.getElementById('dosage').value = '';
+            document.getElementById('startDate').value = '';
+            document.getElementById('endDate').value = '';
+            document.getElementById('reminderTime').value = '';
+
+        } else {
+            alert("Please fill in all patient details.");
+        }
+    }</script>
+<script>
+    function setReminder() {
+        const dosage = document.getElementById('dosage').value;
+        const medicationname = document.getElementById('medicationname').value;
+        const reminderTime = document.getElementById('reminderTime').value;
+        const startDate = new Date(document.getElementById('startDate').value); // Convert to Date
+        const endDate = new Date(document.getElementById('endDate').value); // Convert to Date
+
+        if (startDate > endDate) {
+            alert("End date should be after the start date.");
+            return;
+        }
+
+        const reminderDateTime = new Date(
+            `${startDate.toISOString().slice(0, 10)}T${reminderTime}`
+        );
+        const currentTime = new Date();
+
+        if (reminderDateTime >= currentTime) {
+            const timeDiff = reminderDateTime - currentTime;
+
+            // Set a timeout to trigger the alert at the specified time
+            setTimeout(function () {
+                alert(`Reminder: It's time to take "${medicationname}" of dosage: "${dosage}"`);
+            }, timeDiff);
+        } else {
+            alert("The reminder time should be in the future.");
+        }
+    }
+</script>
+</section><br><br>
+
+    <section id="about">
+<center>
+        <h2>About</h2>
+        <p>About us: We are a small company dedicated to creating web solutions.</p>
+<p>Our mobile application will provide medication reminders,dosage information, and refill alerts.</p> <p> It will also allow
+healthcare providers to monitor patient adherence and adjust medication regimens as needed</p></center>
+    </section>
+
+    <section id="feedback">
+<center>
+<h2>Feedback</h2>
+<p>Please provide your feedback about our website.</p>
+<form>
+    <textarea id="mytext"></textarea>
+    <button type="button" onclick="submitForm()">SUBMIT</button>
+</form>
+<script>
+function submitForm() {
+    const textareaValue = document.getElementById('mytext').value;
+    document.getElementById('mytext').value = '';
+    // You can do something with 'textareaValue' here, like sending it to a server.
+}
+</script>
+
+  
+</section>
+   <script>
+        function showSection(sectionId) {
+            // Hide all sections
+            var sections = document.querySelectorAll('section');
+            sections.forEach(function(section) {
+                section.style.display = 'none';
+            });
+
+            // Show the selected section
+            var selectedSection = document.getElementById(sectionId);
+            if (selectedSection) {
+                selectedSection.style.display = 'block';
+            }
+        }
+    </script> 
+
+   
+ <script>
+showSection('home');
+</script>
+    <script>
+        function toggleMenu() {
+            var menu = document.getElementById("menu");
+            menu.classList.toggle("active");
+
+            var menuIcon = document.querySelector(".menu-icon");
+            menuIcon.classList.toggle("active");
+        }
+    </script>
+</body>
+</html>
+
